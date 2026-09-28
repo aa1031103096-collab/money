@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f4ef">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="我的理財管家">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>我的理財管家</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f7f4ef;color:#292725;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);font-size:16px}
+.app{max-width:720px;margin:auto;padding:18px 0 36px}.hero{padding:12px 4px 18px}.hero h1{margin:0;font-size:30px}.hero p{margin:7px 0 0;color:#777}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 3px 14px #0000000b;margin-bottom:12px}.label{font-size:13px;color:#777}.big{font-size:25px;font-weight:750;margin-top:5px}.muted{color:#888;font-size:13px}
+.progress{height:10px;background:#eee;border-radius:99px;overflow:hidden;margin:10px 0}.bar{height:100%;background:#6f7d67;border-radius:99px;width:0}
+h2{font-size:19px;margin:4px 0 14px}.pool{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #eee}.pool:last-child{border-bottom:0}.pool b{display:block;margin-bottom:3px}
+form{display:grid;gap:10px}label{font-size:13px;color:#666}input,select,button{font:inherit;border-radius:12px;padding:12px;border:1px solid #ddd;background:#fff}button{border:0;background:#30332f;color:#fff;font-weight:700;cursor:pointer}.danger{background:#eee;color:#555;padding:7px 10px;font-size:13px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tx{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}.tx:last-child{border-bottom:0}.tx-title{font-weight:650}.tx-meta{font-size:12px;color:#888;margin-top:3px}.amount{font-weight:750;white-space:nowrap}.empty{text-align:center;color:#999;padding:18px}
+.note{font-size:12px;color:#777;line-height:1.6;margin-top:10px}.footer{text-align:center;color:#999;font-size:12px;margin-top:18px}
+@media(max-width:430px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.hero h1{font-size:27px}}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="hero"><h1>我的理財管家</h1><p>把每一筆花費記下來，讓存錢變得更簡單。</p></section>
+
+<div class="grid">
+<div class="card"><div class="label">本月可變動生活預算</div><div class="big">NT$26,900</div><div class="muted">信用卡＋現金＋Taiwan Pay</div></div>
+<div class="card"><div class="label">每月基金</div><div class="big">NT$10,000</div><div class="muted">固定投入</div></div>
+<div class="card"><div class="label">每月現金存款</div><div class="big">NT$10,000</div><div class="muted">固定存下</div></div>
+<div class="card"><div class="label">緊急預備金</div><div class="big">NT$115,000</div><div class="muted">目標 NT$200,000</div><div class="progress"><div class="bar" id="reserveBar"></div></div></div>
+</div>
+
+<section class="card">
+<h2>本月三大支付池</h2>
+<div class="pool"><div><b>信用卡</b><span class="muted">目標 NT$18,000｜警戒 NT$25,000</span></div><strong id="cardTotal">NT$0</strong></div>
+<div class="pool"><div><b>現金</b><span class="muted">預算 NT$5,000</span></div><strong id="cashTotal">NT$0</strong></div>
+<div class="pool"><div><b>Taiwan Pay</b><span class="muted">預算 NT$3,900</span></div><strong id="twTotal">NT$0</strong></div>
+</section>
+
+<section class="card">
+<h2>新增支出</h2>
+<form id="form">
+<div class="row">
+<div><label>金額</label><input id="amount" type="number" min="1" step="1" placeholder="例如 550" required></div>
+<div><label>日期</label><input id="date" type="date" required></div>
+</div>
+<div class="row">
+<div><label>支付方式</label><select id="pool"><option value="card">信用卡</option><option value="cash">現金</option><option value="taiwanpay">Taiwan Pay</option></select></div>
+<div><label>信用卡</label><select id="card"><option value="">不適用</option><option>台新</option><option>聯邦國旅卡</option></select></div>
+</div>
+<div class="row">
+<div><label>類別</label><select id="category"><option>交通</option><option>飲食</option><option>運動</option><option>購物</option><option>咖啡娛樂</option><option>其他</option></select></div>
+<div><label>備註</label><input id="note" placeholder="例如 高鐵"></div>
+</div>
+<button>＋ 新增支出</button>
+</form>
+<p class="note">規則：刷卡或 LINE Pay 綁信用卡，都算「信用卡支出」；Taiwan Pay 與現金則分開計算。</p>
+</section>
+
+<section class="card">
+<h2>本月明細</h2>
+<div id="list"></div>
+</section>
+<div class="footer">資料會儲存在這台裝置的瀏覽器中</div>
+</div>
+
+<script>
+const KEY="ly-budget-pwa-v1";
+let data=JSON.parse(localStorage.getItem(KEY)||"[]");
+const $=id=>document.getElementById(id);
+$("date").value=new Date().toISOString().slice(0,10);
+function money(n){return "NT$"+Number(n).toLocaleString("zh-TW")}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function render(){
+ const sums={card:0,cash:0,taiwanpay:0};
+ data.forEach(x=>sums[x.pool]+=Number(x.amount));
+ $("cardTotal").textContent=money(sums.card);
+ $("cashTotal").textContent=money(sums.cash);
+ $("twTotal").textContent=money(sums.taiwanpay);
+ $("reserveBar").style.width=Math.min(100,115000/200000*100)+"%";
+ const list=$("list");
+ if(!data.length){list.innerHTML='<div class="empty">目前還沒有支出紀錄</div>';return}
+ const sorted=[...data].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+ list.innerHTML=sorted.map(x=>`
+ <div class="tx">
+   <div><div class="tx-title">${escapeHtml(x.note||x.category)}</div>
+   <div class="tx-meta">${x.date}｜${poolName(x.pool)}${x.card?"｜"+x.card:""}｜${x.category}</div></div>
+   <div><div class="amount">${money(x.amount)}</div><button class="danger" onclick="removeTx(${x.id})">刪除</button></div>
+ </div>`).join("");
+}
+function poolName(v){return v==="card"?"信用卡":v==="cash"?"現金":"Taiwan Pay"}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function removeTx(id){if(confirm("確定刪除這筆紀錄？")){data=data.filter(x=>x.id!==id);save()}}
+$("form").addEventListener("submit",e=>{
+ e.preventDefault();
+ const pool=$("pool").value;
+ let card=$("card").value;
+ if(pool!=="card") card="";
+ data.push({id:Date.now(),amount:Number($("amount").value),date:$("date").value,pool,card,category:$("category").value,note:$("note").value.trim()});
+ e.target.reset();$("date").value=new Date().toISOString().slice(0,10);save();
+});
+if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+render();
+</script>
+</body>
+</html>
