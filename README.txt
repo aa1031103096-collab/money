@@ -1,12 +1,13 @@
-# 玲毓｜我的理財管家 PWA
+我的理財管家 PWA 新版
 
-這是一個可安裝到 iPhone 主畫面的 PWA 版本。
+本版新增：
+- 三大支付池顯示已支出金額
+- 三大支付池顯示剩餘額度
+- 支付池進度條
+- 超支時顯示「超支 NT$XXX」
+- 保留原有信用卡、現金、Taiwan Pay 記帳功能
 
-## 安裝方式
-1. 將整個資料夾部署到 HTTPS 網站（例如 GitHub Pages、Netlify、Vercel）。
-2. 用 iPhone Safari 開啟網站。
-3. 點「分享」→「加入主畫面」。
-4. 從 iPhone 主畫面開啟「我的理財管家」。
-
-## 注意
-資料目前使用瀏覽器 localStorage 儲存，只會保存在該裝置/瀏覽器；尚未做 iCloud 或跨裝置同步。
+更新 GitHub Pages：
+1. 解壓縮本 ZIP。
+2. 將 index.html、manifest.json、sw.js、icon-192.png、icon-512.png 上傳到原本 money Repository。
+3. 用新的檔案取代舊檔。
