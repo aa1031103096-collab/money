@@ -3,91 +3,90 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f7f4ef">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="我的理財管家">
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<title>我的理財管家</title>
+<meta name="theme-color" content="#111827">
+<link rel="manifest" href="manifest.json?v=7">
+<title>我的理財管家 v7</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f7f4ef;color:#292725;font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;padding:env(safe-area-inset-top) 16px env(safe-area-inset-bottom);font-size:16px}
-.app{max-width:720px;margin:auto;padding:18px 0 36px}
-.hero{padding:12px 4px 16px}.hero h1{margin:0;font-size:30px}.hero p{margin:7px 0 0;color:#777}
-.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 3px 14px #0000000b;margin-bottom:12px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.label{font-size:13px;color:#777}.big{font-size:25px;font-weight:750;margin-top:5px}.muted{color:#888;font-size:13px}
-h2{font-size:19px;margin:4px 0 14px}
-.month-switch{display:grid;grid-template-columns:48px 1fr 48px;gap:8px;align-items:center}
-.month-switch button{height:46px;padding:0;background:#30332f}
-.month-switch select{height:46px;font-weight:700}
-.month-note{text-align:center;color:#777;font-size:12px;margin-top:8px}
-.progress{height:9px;background:#eee;border-radius:99px;overflow:hidden;margin:9px 0 4px}
-.bar{height:100%;background:#6f7d67;border-radius:99px;width:0;transition:width .25s ease}
-.pool{padding:13px 0;border-bottom:1px solid #eee}.pool:last-child{border-bottom:0}
-.pool-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.pool b{font-size:18px}
-.pool-detail{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:#777;margin-top:6px}
-.pool-detail strong{color:#292725;font-size:14px}.warning{color:#a44!important}
-form{display:grid;gap:10px}label{font-size:13px;color:#666}
-input,select,button{font:inherit;border-radius:12px;padding:12px;border:1px solid #ddd;background:#fff}
-button{border:0;background:#30332f;color:#fff;font-weight:700;cursor:pointer}
-button:disabled{opacity:.45}.danger{background:#eee;color:#555;padding:7px 10px;font-size:13px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.tx{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
-.tx:last-child{border-bottom:0}.tx-title{font-weight:650}.tx-meta{font-size:12px;color:#888;margin-top:3px}
-.amount{font-weight:750;white-space:nowrap}.empty{text-align:center;color:#999;padding:18px}
-.month-total{font-size:13px;color:#777;margin:-5px 0 8px}.month-total strong{color:#292725}
-.future-badge{display:inline-block;font-size:11px;padding:3px 7px;border-radius:99px;background:#eee;color:#666;margin-left:5px}
-.note{font-size:12px;color:#777;line-height:1.6;margin-top:10px}
-.footer{text-align:center;color:#999;font-size:12px;margin-top:18px}
-@media(max-width:430px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.hero h1{font-size:27px}}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif;background:#f5f7fb;color:#172033}
+.wrap{max-width:760px;margin:auto;padding:18px 14px 40px}
+h1{font-size:27px;margin:4px 0 3px}.sub{color:#6b7280;font-size:13px;margin-bottom:15px}
+.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 3px 16px #0000000b}
+.monthbox{background:#111827;color:white;border-radius:20px;padding:16px}
+.month-title{font-size:13px;opacity:.8;margin-bottom:10px}
+.month-row{display:grid;grid-template-columns:48px 1fr 48px;gap:8px;align-items:center}
+.month-btn{border:0;border-radius:12px;background:#374151;color:#fff;height:44px;font-size:22px}
+.month-select{height:44px;border:0;border-radius:12px;background:#fff;color:#111827;text-align:center;font-size:17px;font-weight:700;padding:0 10px}
+.month-actions{display:flex;gap:8px;margin-top:10px}
+.today-btn{flex:1;border:1px solid #4b5563;background:transparent;color:white;border-radius:11px;padding:9px}
+.future-badge{display:inline-block;background:#fbbf24;color:#111827;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:700;margin-top:9px}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.metric{background:#f8fafc;border-radius:14px;padding:13px}.metric b{display:block;font-size:21px;margin-top:4px}
+.label{font-size:12px;color:#6b7280}
+.pools{display:grid;grid-template-columns:1fr;gap:11px}
+.pool{border:1px solid #e5e7eb;border-radius:15px;padding:13px}
+.pool-head{display:flex;justify-content:space-between;gap:8px}.pool-name{font-weight:700}.remain{font-weight:700}
+.bar{height:9px;background:#e5e7eb;border-radius:99px;overflow:hidden;margin:9px 0 6px}.fill{height:100%;border-radius:99px;background:#111827}
+.pool-foot{display:flex;justify-content:space-between;color:#6b7280;font-size:12px}
+button,.primary{font:inherit}
+form{display:grid;gap:10px}
+input,select{width:100%;padding:12px;border:1px solid #d7dce5;border-radius:11px;background:#fff;font-size:15px}
+.primary{border:0;border-radius:12px;padding:12px;background:#111827;color:white;font-weight:700}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.detail{border-top:1px solid #edf0f4;padding:10px 0;display:flex;justify-content:space-between;gap:10px}
+.detail:first-child{border-top:0}.muted{color:#6b7280;font-size:12px}
+.amount{font-weight:700;white-space:nowrap}
+.empty{text-align:center;color:#9ca3af;padding:18px}
+.danger{border:0;background:#fee2e2;color:#991b1b;border-radius:8px;padding:5px 8px}
+.small{font-size:12px;color:#6b7280}
+@media(min-width:600px){.pools{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
-<div class="app">
-<section class="hero">
+<div class="wrap">
 <h1>我的理財管家</h1>
-<p>每個月份獨立計算，未來支出也可以提前安排。</p>
+<div class="sub">v7｜月份獨立記帳版</div>
+
+<section class="monthbox">
+  <div class="month-title">📅 目前查看的記帳月份</div>
+  <div class="month-row">
+    <button class="month-btn" id="prevBtn">‹</button>
+    <select class="month-select" id="monthSelect"></select>
+    <button class="month-btn" id="nextBtn">›</button>
+  </div>
+  <div class="month-actions">
+    <button class="today-btn" id="currentBtn">回到本月</button>
+  </div>
+  <div id="futureBadge"></div>
 </section>
 
 <section class="card">
-<h2>查看月份</h2>
-<div class="month-switch">
-<button id="prevMonth" aria-label="上一個月">‹</button>
-<select id="monthSelect"></select>
-<button id="nextMonth" aria-label="下一個月">›</button>
-</div>
-<div class="month-note" id="monthNote"></div>
+  <div class="summary">
+    <div class="metric"><span class="label">本月總支出</span><b id="monthTotal">$0</b></div>
+    <div class="metric"><span class="label">本月變動預算</span><b>$26,900</b></div>
+    <div class="metric"><span class="label">本月剩餘預算</span><b id="monthRemain">$26,900</b></div>
+    <div class="metric"><span class="label">預備金</span><b>$115,000</b></div>
+  </div>
 </section>
 
-<div class="grid">
-<div class="card"><div class="label">本月可變動生活預算</div><div class="big">NT$26,900</div><div class="muted">信用卡＋現金＋Taiwan Pay</div></div>
-<div class="card"><div class="label">本月已支出</div><div class="big" id="monthTotalTop">NT$0</div><div class="muted">只計算目前選擇月份</div></div>
-<div class="card"><div class="label">每月基金</div><div class="big">NT$10,000</div><div class="muted">固定投入</div></div>
-<div class="card"><div class="label">每月現金存款</div><div class="big">NT$10,000</div><div class="muted">固定存下</div></div>
-</div>
-
 <section class="card">
-<h2 id="poolTitle">本月三大支付池</h2>
-
-<div class="pool">
-  <div class="pool-head"><b>信用卡</b><span class="muted">預算 NT$18,000</span></div>
-  <span class="muted">警戒 NT$25,000</span>
-  <div class="progress"><div class="bar" id="cardBar"></div></div>
-  <div class="pool-detail"><span>已支出 <strong id="cardTotal">NT$0</strong></span><span>剩餘 <strong id="cardRemain">NT$18,000</strong></span></div>
-</div>
-
-<div class="pool">
-  <div class="pool-head"><b>現金</b><span class="muted">預算 NT$5,000</span></div>
-  <div class="progress"><div class="bar" id="cashBar"></div></div>
-  <div class="pool-detail"><span>已支出 <strong id="cashTotal">NT$0</strong></span><span>剩餘 <strong id="cashRemain">NT$5,000</strong></span></div>
-</div>
-
-<div class="pool">
-  <div class="pool-head"><b>Taiwan Pay</b><span class="muted">預算 NT$3,900</span></div>
-  <div class="progress"><div class="bar" id="twBar"></div></div>
-  <div class="pool-detail"><span>已支出 <strong id="twTotal">NT$0</strong></span><span>剩餘 <strong id="twRemain">NT$3,900</strong></span></div>
+<h2>三大支付池</h2>
+<div class="pools">
+  <div class="pool">
+    <div class="pool-head"><span class="pool-name">💳 信用卡</span><span class="remain" id="cardRemain">$18,000</span></div>
+    <div class="bar"><div class="fill" id="cardBar"></div></div>
+    <div class="pool-foot"><span>已支出 <b id="cardSpent">$0</b></span><span>額度 $18,000</span></div>
+  </div>
+  <div class="pool">
+    <div class="pool-head"><span class="pool-name">💵 現金</span><span class="remain" id="cashRemain">$5,000</span></div>
+    <div class="bar"><div class="fill" id="cashBar"></div></div>
+    <div class="pool-foot"><span>已支出 <b id="cashSpent">$0</b></span><span>額度 $5,000</span></div>
+  </div>
+  <div class="pool">
+    <div class="pool-head"><span class="pool-name">📱 Taiwan Pay</span><span class="remain" id="twRemain">$3,900</span></div>
+    <div class="bar"><div class="fill" id="twBar"></div></div>
+    <div class="pool-foot"><span>已支出 <b id="twSpent">$0</b></span><span>額度 $3,900</span></div>
+  </div>
 </div>
 </section>
 
@@ -95,204 +94,150 @@ button:disabled{opacity:.45}.danger{background:#eee;color:#555;padding:7px 10px;
 <h2>新增支出</h2>
 <form id="form">
 <div class="row">
-<div><label>金額</label><input id="amount" type="number" min="1" step="1" placeholder="例如 550" required></div>
-<div><label>日期</label><input id="date" type="date" required></div>
+<input id="date" type="date" required>
+<input id="amount" type="number" min="0" step="1" placeholder="金額" required>
 </div>
 <div class="row">
-<div><label>支付方式</label><select id="pool"><option value="card">信用卡</option><option value="cash">現金</option><option value="taiwanpay">Taiwan Pay</option></select></div>
-<div><label>信用卡</label><select id="card"><option value="">不適用</option><option>台新</option><option>聯邦國旅卡</option></select></div>
+<select id="pool">
+<option value="card">信用卡</option>
+<option value="cash">現金</option>
+<option value="tw">Taiwan Pay</option>
+</select>
+<select id="card">
+<option value="">不適用</option>
+<option>台新</option>
+<option>聯邦國旅卡</option>
+</select>
 </div>
 <div class="row">
-<div><label>類別</label><select id="category"><option>交通</option><option>飲食</option><option>運動</option><option>購物</option><option>咖啡娛樂</option><option>其他</option></select></div>
-<div><label>備註</label><input id="note" placeholder="例如 10月高鐵"></div>
+<select id="category">
+<option>交通</option><option>飲食</option><option>運動</option><option>購物</option><option>咖啡娛樂</option><option>其他</option>
+</select>
+<input id="note" placeholder="備註（選填）">
 </div>
-<button>＋ 新增支出</button>
+<button class="primary">＋ 新增支出</button>
 </form>
-<p class="note">支出會依「日期」自動歸屬月份。你可以現在就登錄下個月或更後面的支出，不會混入目前月份。</p>
+<div class="small" style="margin-top:9px">💡 可以直接選未來月份，先把預計支出記進去；每個月份的支出池會各自計算。</div>
 </section>
 
 <section class="card">
 <h2 id="detailTitle">本月明細</h2>
-<div class="month-total">本月共 <strong id="monthTotal">NT$0</strong></div>
-<div id="list"></div>
+<div id="details"></div>
 </section>
-
-<div class="footer">每個月份獨立計算｜資料儲存在這台裝置的瀏覽器中</div>
 </div>
 
 <script>
-const KEY="ly-budget-pwa-v6";
-const $=id=>document.getElementById(id);
+const KEY='ly-budget-pwa-v7-data';
+const OLD_KEYS=['ly-budget-pwa-v6','ly-budget-pwa-v5','ly-budget-pwa-v4','ly-budget-pwa-v3','ly-budget-pwa'];
+const BUDGET={card:18000,cash:5000,tw:3900};
+const TOTAL_BUDGET=26900;
+let data=[]; let selectedMonth='';
 
-function money(n){return "NT$"+Number(n||0).toLocaleString("zh-TW")}
-function todayISO(){return new Date().toISOString().slice(0,10)}
-function currentYM(){return todayISO().slice(0,7)}
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function normalizeDate(v){
-  if(!v)return todayISO();
-  const s=String(v).trim();
-  let m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
-  if(m)return `${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
-  m=s.match(/^(\d{2,3})[年\/\-](\d{1,2})[月\/\-](\d{1,2})日?$/);
-  if(m){let y=Number(m[1]);if(y<1911)y+=1911;return `${y}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`}
-  return todayISO();
+const money=n=>'$'+Number(n||0).toLocaleString('zh-TW');
+function pad(n){return String(n).padStart(2,'0')}
+function ymNow(){let d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)}
+function normalizeDate(d){
+ if(!d)return '';
+ d=String(d);
+ if(/^\\d{4}-\\d{2}-\\d{2}$/.test(d))return d;
+ if(/^\\d{4}-\\d{2}$/.test(d))return d+'-01';
+ let x=new Date(d); if(isNaN(x))return '';
+ return x.getFullYear()+'-'+pad(x.getMonth()+1)+'-'+pad(x.getDate());
 }
-function normalizeTx(x,i){
-  let p=String(x.pool??x.method??x.payment??"card").toLowerCase();
-  if(["taiwanpay","taiwan pay","taiwan_pay","tw","台灣pay","台灣支付"].includes(p))p="taiwanpay";
-  else if(["cash","現金"].includes(p))p="cash";
-  else p="card";
-  return {
-    id:Number(x.id)||Date.now()+i,
-    amount:Number(x.amount??x.money??x.price??0)||0,
-    date:normalizeDate(x.date??x.day),
-    pool:p,
-    card:(x.card&&x.card!=="不適用")?x.card:"",
-    category:x.category||"其他",
-    note:String(x.note??x.name??x.title??"").trim()
-  };
-}
-function safeArray(v){
-  if(Array.isArray(v))return v;
-  if(v&&Array.isArray(v.tx))return v.tx;
-  if(v&&Array.isArray(v.data))return v.data;
-  return [];
-}
-function loadData(){
-  let direct=[];
-  try{direct=safeArray(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){}
-  if(direct.length)return direct.map(normalizeTx);
-  const all=[];
-  for(let i=0;i<localStorage.length;i++){
-    const k=localStorage.key(i);
-    if(!k||k===KEY)continue;
-    try{
-      const arr=safeArray(JSON.parse(localStorage.getItem(k)||"null"));
-      if(arr.length&&arr.some(x=>x&&("amount" in x||"money" in x||"price" in x)))all.push(...arr);
-    }catch(e){}
-  }
-  const seen=new Set(),result=[];
-  all.map(normalizeTx).forEach(x=>{
-    if(!x.amount)return;
-    const fp=[x.date,x.amount,x.pool,x.card,x.category,x.note].join("|");
-    if(!seen.has(fp)){seen.add(fp);result.push(x)}
-  });
-  localStorage.setItem(KEY,JSON.stringify(result));
-  return result;
-}
-let data=loadData();
-let selectedMonth=currentYM();
-
 function monthLabel(ym){
-  const [y,m]=ym.split("-").map(Number);
-  return `${y}年${m}月`;
+ let [y,m]=ym.split('-'); return `${y} 年 ${Number(m)} 月`;
 }
-function addMonths(ym,delta){
-  const [y,m]=ym.split("-").map(Number);
-  const d=new Date(y,m-1+delta,1);
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+function load(){
+ try{data=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){data=[]}
+ if(!Array.isArray(data))data=[];
+ if(!data.length){
+   for(const k of OLD_KEYS){
+     try{
+       const x=JSON.parse(localStorage.getItem(k)||'[]');
+       if(Array.isArray(x)&&x.length){data.push(...x.map(v=>({...v,date:normalizeDate(v.date||v.datetime||v.time)})));break}
+     }catch(e){}
+   }
+ }
+ data=data.filter(x=>normalizeDate(x.date)).map(x=>({...x,date:normalizeDate(x.date)}));
+ localStorage.setItem(KEY,JSON.stringify(data));
+ selectedMonth=localStorage.getItem('ly-budget-pwa-v7-month')||ymNow();
 }
-function ensureMonthOptions(){
-  const months=new Set([currentYM(),selectedMonth]);
-  data.forEach(x=>months.add(normalizeDate(x.date).slice(0,7)));
-  // Always offer a useful planning window: 6 months back and 12 months forward.
-  for(let i=-6;i<=12;i++)months.add(addMonths(currentYM(),i));
-  const arr=[...months].sort();
-  $("monthSelect").innerHTML=arr.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join("");
-  $("monthSelect").value=selectedMonth;
+function save(){localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem('ly-budget-pwa-v7-month',selectedMonth)}
+
+function monthList(){
+ const set=new Set(); const now=new Date();
+ for(let i=-6;i<=18;i++){
+   let d=new Date(now.getFullYear(),now.getMonth()+i,1);
+   set.add(d.getFullYear()+'-'+pad(d.getMonth()+1));
+ }
+ data.forEach(x=>set.add(x.date.slice(0,7)));
+ return [...set].sort();
 }
-function syncCardChoice(){
-  const isCard=$("pool").value==="card";
-  $("card").disabled=!isCard;
-  if(!isCard)$("card").value="";
+function renderMonthSelect(){
+ const list=monthList();
+ if(!list.includes(selectedMonth))list.push(selectedMonth);
+ list.sort();
+ monthSelect.innerHTML=list.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('');
+ monthSelect.value=selectedMonth;
+ futureBadge.innerHTML=selectedMonth>ymNow()?'<span class="future-badge">📌 預先登錄月份</span>':'';
 }
-function save(){localStorage.setItem(KEY,JSON.stringify(data));ensureMonthOptions();render()}
+function monthItems(){return data.filter(x=>x.date.slice(0,7)===selectedMonth)}
+function sum(pool,items){return items.filter(x=>x.pool===pool).reduce((a,x)=>a+Number(x.amount||0),0)}
 function render(){
-  const monthly=data.filter(x=>normalizeDate(x.date).slice(0,7)===selectedMonth);
-  const sums={card:0,cash:0,taiwanpay:0};
-  monthly.forEach(x=>{if(x.pool in sums)sums[x.pool]+=Number(x.amount)||0});
-  const budgets={card:18000,cash:5000,taiwanpay:3900};
-  const ids={
-    card:{total:"cardTotal",remain:"cardRemain",bar:"cardBar"},
-    cash:{total:"cashTotal",remain:"cashRemain",bar:"cashBar"},
-    taiwanpay:{total:"twTotal",remain:"twRemain",bar:"twBar"}
-  };
-  Object.keys(budgets).forEach(p=>{
-    const remain=budgets[p]-sums[p];
-    const pct=Math.min(100,Math.max(0,sums[p]/budgets[p]*100));
-    const i=ids[p];
-    $(i.total).textContent=money(sums[p]);
-    $(i.remain).textContent=remain>=0?money(remain):"超支 "+money(Math.abs(remain));
-    $(i.remain).classList.toggle("warning",remain<0);
-    $(i.bar).style.width=pct+"%";
-  });
-
-  const total=monthly.reduce((s,x)=>s+Number(x.amount||0),0);
-  $("monthTotal").textContent=money(total);
-  $("monthTotalTop").textContent=money(total);
-
-  const isCurrent=selectedMonth===currentYM();
-  $("poolTitle").textContent=isCurrent?"本月三大支付池":`${monthLabel(selectedMonth)}三大支付池`;
-  $("detailTitle").textContent=isCurrent?"本月明細":`${monthLabel(selectedMonth)}明細`;
-  $("monthNote").textContent=isCurrent?"目前月份":(selectedMonth>currentYM()?"預先規劃月份":"歷史月份");
-
-  if(!monthly.length){
-    $("list").innerHTML='<div class="empty">這個月份還沒有支出紀錄</div>';
-    return;
-  }
-  $("list").innerHTML=monthly.sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).map(x=>{
-    const future=selectedMonth>currentYM();
-    return `<div class="tx">
-      <div>
-        <div class="tx-title">${escapeHtml(x.note||x.category)}${future?'<span class="future-badge">預先登錄</span>':""}</div>
-        <div class="tx-meta">${escapeHtml(x.date)}｜${x.pool==="card"?"信用卡":x.pool==="cash"?"現金":"Taiwan Pay"}${x.card?"｜"+escapeHtml(x.card):""}｜${escapeHtml(x.category)}</div>
-      </div>
-      <div>
-        <div class="amount">${money(x.amount)}</div>
-        <button class="danger" onclick="removeTx(${x.id})">刪除</button>
-      </div>
-    </div>`;
-  }).join("");
+ renderMonthSelect();
+ const items=monthItems();
+ const ct=sum('card',items), ca=sum('cash',items), tw=sum('tw',items);
+ const total=ct+ca+tw;
+ monthTotal.textContent=money(total);
+ monthRemain.textContent=money(Math.max(TOTAL_BUDGET-total,0));
+ document.querySelector('.metric:nth-child(3) .label').textContent=selectedMonth===ymNow()?'本月剩餘預算':`${monthLabel(selectedMonth)}剩餘預算`;
+ const vals=[['card',ct,18000,'cardSpent','cardRemain','cardBar'],['cash',ca,5000,'cashSpent','cashRemain','cashBar'],['tw',tw,3900,'twSpent','twRemain','twBar']];
+ vals.forEach(([p,spent,b,si,ri,bi])=>{
+   document.getElementById(si).textContent=money(spent);
+   document.getElementById(ri).textContent=money(Math.max(b-spent,0));
+   document.getElementById(bi).style.width=Math.min(spent/b*100,100)+'%';
+ });
+ detailTitle.textContent=`${monthLabel(selectedMonth)}支出明細`;
+ if(!items.length){details.innerHTML='<div class="empty">這個月份目前沒有支出紀錄</div>';return}
+ items.sort((a,b)=>b.date.localeCompare(a.date));
+ details.innerHTML=items.map((x,i)=>{
+   const poolName=x.pool==='card'?'信用卡':x.pool==='cash'?'現金':'Taiwan Pay';
+   const extra=x.pool==='card'&&x.card?`｜${esc(x.card)}`:'';
+   return `<div class="detail">
+     <div><b>${esc(x.category||'其他')}</b><div class="muted">${esc(x.date)}｜${poolName}${extra}${x.note?'｜'+esc(x.note):''}</div></div>
+     <div style="text-align:right"><div class="amount">${money(x.amount)}</div><button class="danger" onclick="removeItem('${esc(x.id)}')">刪除</button></div>
+   </div>`
+ }).join('');
 }
-function removeTx(id){
-  if(confirm("確定刪除這筆紀錄？")){
-    data=data.filter(x=>x.id!==id);
-    save();
-  }
+function removeItem(id){
+ data=data.filter(x=>String(x.id)!==String(id));save();render();
 }
-$("monthSelect").addEventListener("change",e=>{selectedMonth=e.target.value;render()});
-$("prevMonth").addEventListener("click",()=>{selectedMonth=addMonths(selectedMonth,-1);ensureMonthOptions();render()});
-$("nextMonth").addEventListener("click",()=>{selectedMonth=addMonths(selectedMonth,1);ensureMonthOptions();render()});
+function shiftMonth(delta){
+ let [y,m]=selectedMonth.split('-').map(Number);
+ let d=new Date(y,m-1+delta,1);
+ selectedMonth=d.getFullYear()+'-'+pad(d.getMonth()+1);
+ save();render();
+}
+prevBtn.onclick=()=>shiftMonth(-1);
+nextBtn.onclick=()=>shiftMonth(1);
+currentBtn.onclick=()=>{selectedMonth=ymNow();save();render()};
+monthSelect.onchange=()=>{selectedMonth=monthSelect.value;save();render()};
 
-$("pool").addEventListener("change",syncCardChoice);
-$("form").addEventListener("submit",e=>{
-  e.preventDefault();
-  const pool=$("pool").value;
-  const date=normalizeDate($("date").value);
-  data.push({
-    id:Date.now(),
-    amount:Number($("amount").value),
-    date,
-    pool,
-    card:pool==="card"?$("card").value:"",
-    category:$("category").value,
-    note:$("note").value.trim()
-  });
-  selectedMonth=date.slice(0,7);
-  e.target.reset();
-  $("date").value=todayISO();
-  syncCardChoice();
-  save();
-});
+form.onsubmit=e=>{
+ e.preventDefault();
+ const dateVal=date.value, amountVal=Number(amount.value);
+ if(!dateVal||!amountVal||amountVal<0)return;
+ const item={id:Date.now().toString()+Math.random().toString(16).slice(2),date:dateVal,amount:amountVal,pool:pool.value,card:pool.value==='card'?card.value:'',category:category.value,note:note.value.trim()};
+ data.push(item); selectedMonth=dateVal.slice(0,7); save();
+ form.reset(); date.value=dateVal; render();
+};
 
-$("date").value=todayISO();
-syncCardChoice();
-ensureMonthOptions();
+load();
+date.value=new Date().toISOString().slice(0,10);
 render();
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js?v=6").catch(()=>{}));
-}
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js?v=7').catch(()=>{});
 </script>
 </body>
 </html>

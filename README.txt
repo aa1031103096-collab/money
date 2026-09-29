@@ -1,20 +1,14 @@
-我的理財管家 PWA v6｜月份管理版
+# 我的理財管家 PWA v7
+本版重點：月份切換強化、未來月份預先記帳、每月三大支付池完全分開。
 
-新增：
-- 月份切換（上一個月／下一個月／下拉選擇）
-- 未來月份可以預先記帳
-- 每個月份的信用卡、現金、Taiwan Pay 支出池完全獨立
-- 每個月份的已支出、剩餘額度、進度條完全獨立
-- 每個月份有自己的明細與總支出
-- 未來月份明細會標示「預先登錄」
-- 新增支出後會自動切換到該筆支出的月份
-- 保留舊版資料並自動依日期歸屬月份
-- Service Worker 升級為 v6
+GitHub Pages 更新時請替換：
+1. index.html
+2. sw.js
+3. manifest.json
+4. icon-192.png
+5. icon-512.png
 
-GitHub 更新：
-請將以下 5 個檔案取代 Repository 中同名檔案：
-index.html
-sw.js
-manifest.json
-icon-192.png
-icon-512.png
+更新後建議先用 Safari 開：
+https://你的帳號.github.io/money/?v=7
+
+確認看到「v7｜月份獨立記帳版」以及最上方黑色「目前查看的記帳月份」區塊，再回到主畫面 App。
