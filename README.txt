@@ -1,13 +1,18 @@
-我的理財管家 PWA 新版
+我的理財管家 PWA v5
 
-本版新增：
-- 三大支付池顯示已支出金額
-- 三大支付池顯示剩餘額度
-- 支付池進度條
-- 超支時顯示「超支 NT$XXX」
-- 保留原有信用卡、現金、Taiwan Pay 記帳功能
+本版修正：
+- Taiwan Pay 已支出會正確累加。
+- Taiwan Pay 剩餘額度會正確扣減。
+- Taiwan Pay 進度條會跟著支出變化。
+- 本月明細會顯示本月所有支出。
+- 新增本月總支出。
+- 會自動掃描並嘗試搬移舊版記帳資料。
+- Service Worker 升級為 v5，並清除舊快取。
 
-更新 GitHub Pages：
-1. 解壓縮本 ZIP。
-2. 將 index.html、manifest.json、sw.js、icon-192.png、icon-512.png 上傳到原本 money Repository。
-3. 用新的檔案取代舊檔。
+GitHub 更新：
+請把以下 5 個檔案取代 Repository 中同名檔案：
+index.html
+sw.js
+manifest.json
+icon-192.png
+icon-512.png

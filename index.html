@@ -21,23 +21,20 @@ body{margin:0;background:#f7f4ef;color:#292725;font-family:-apple-system,BlinkMa
 .progress{height:9px;background:#eee;border-radius:99px;overflow:hidden;margin:9px 0 4px}
 .bar{height:100%;background:#6f7d67;border-radius:99px;width:0;transition:width .25s ease}
 .pool{padding:13px 0;border-bottom:1px solid #eee}.pool:last-child{border-bottom:0}
-.pool b{display:block;margin-bottom:3px}
-.pool-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.pool-head{display:flex;justify-content:space-between;align-items:center;gap:10px}.pool b{font-size:18px}
 .pool-detail{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:#777;margin-top:6px}
-.pool-detail strong{color:#292725;font-size:14px}
-.warning{color:#a44!important}
+.pool-detail strong{color:#292725;font-size:14px}.warning{color:#a44!important}
 h2{font-size:19px;margin:4px 0 14px}
-form{display:grid;gap:10px}
-label{font-size:13px;color:#666}
+form{display:grid;gap:10px}label{font-size:13px;color:#666}
 input,select,button{font:inherit;border-radius:12px;padding:12px;border:1px solid #ddd;background:#fff}
 button{border:0;background:#30332f;color:#fff;font-weight:700;cursor:pointer}
-.danger{background:#eee;color:#555;padding:7px 10px;font-size:13px}
+button:disabled{opacity:.45}.danger{background:#eee;color:#555;padding:7px 10px;font-size:13px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tx{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #eee}
-.tx:last-child{border-bottom:0}.tx-title{font-weight:650}
-.tx-meta{font-size:12px;color:#888;margin-top:3px}.amount{font-weight:750;white-space:nowrap}
-.empty{text-align:center;color:#999;padding:18px}
+.tx:last-child{border-bottom:0}.tx-title{font-weight:650}.tx-meta{font-size:12px;color:#888;margin-top:3px}
+.amount{font-weight:750;white-space:nowrap}.empty{text-align:center;color:#999;padding:18px}
 .note{font-size:12px;color:#777;line-height:1.6;margin-top:10px}
+.month-total{font-size:13px;color:#777;margin:-5px 0 8px}.month-total strong{color:#292725}
 .footer{text-align:center;color:#999;font-size:12px;margin-top:18px}
 @media(max-width:430px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.hero h1{font-size:27px}}
 </style>
@@ -101,90 +98,160 @@ button{border:0;background:#30332f;color:#fff;font-weight:700;cursor:pointer}
 
 <section class="card">
 <h2>本月明細</h2>
+<div class="month-total">本月共 <strong id="monthTotal">NT$0</strong></div>
 <div id="list"></div>
 </section>
-<div class="footer">資料會儲存在這台裝置的瀏覽器中</div>
+<div class="footer">資料儲存在這台裝置的瀏覽器中</div>
 </div>
 
 <script>
-const KEY="ly-budget-pwa-v3";
-let data=JSON.parse(localStorage.getItem(KEY)||"[]");
+const KEY="ly-budget-pwa-v5";
 const $=id=>document.getElementById(id);
-$("date").value=new Date().toISOString().slice(0,10);
 
-function money(n){return "NT$"+Number(n).toLocaleString("zh-TW")}
-function poolName(v){return v==="card"?"信用卡":v==="cash"?"現金":"Taiwan Pay"}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function money(n){return "NT$"+Number(n||0).toLocaleString("zh-TW")}
+function todayISO(){return new Date().toISOString().slice(0,10)}
+function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function normalizeDate(v){
+  if(!v)return todayISO();
+  const s=String(v).trim();
+  let m=s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})$/);
+  if(m)return `${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
+  m=s.match(/^(\d{2,3})[年\/\-](\d{1,2})[月\/\-](\d{1,2})日?$/);
+  if(m){let y=Number(m[1]);if(y<1911)y+=1911;return `${y}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`}
+  return todayISO();
+}
+function normalizeTx(x,i){
+  let p=String(x.pool??x.method??x.payment??"card").toLowerCase();
+  if(["taiwanpay","taiwan pay","taiwan_pay","tw","台灣pay","台灣支付"].includes(p))p="taiwanpay";
+  else if(["cash","現金"].includes(p))p="cash";
+  else p="card";
+  return {
+    id:Number(x.id)||Date.now()+i,
+    amount:Number(x.amount??x.money??x.price??0)||0,
+    date:normalizeDate(x.date??x.day),
+    pool:p,
+    card:(x.card&&x.card!=="不適用")?x.card:"",
+    category:x.category||"其他",
+    note:String(x.note??x.name??x.title??"").trim()
+  };
+}
+function safeArray(v){
+  if(Array.isArray(v))return v;
+  if(v&&Array.isArray(v.tx))return v.tx;
+  if(v&&Array.isArray(v.data))return v.data;
+  return [];
+}
+function loadData(){
+  let direct=[];
+  try{direct=safeArray(JSON.parse(localStorage.getItem(KEY)||"null"))}catch(e){}
+  if(direct.length)return direct.map(normalizeTx);
+
+  // Scan old localStorage entries and migrate recognizable transaction arrays.
+  const all=[];
+  for(let i=0;i<localStorage.length;i++){
+    const k=localStorage.key(i);
+    if(!k||k===KEY)continue;
+    try{
+      const arr=safeArray(JSON.parse(localStorage.getItem(k)||"null"));
+      if(arr.length && arr.some(x=>x&&("amount" in x || "money" in x || "price" in x))){
+        all.push(...arr);
+      }
+    }catch(e){}
+  }
+  const seen=new Set(), result=[];
+  all.map(normalizeTx).forEach(x=>{
+    if(!x.amount)return;
+    const fp=[x.date,x.amount,x.pool,x.card,x.category,x.note].join("|");
+    if(!seen.has(fp)){seen.add(fp);result.push(x)}
+  });
+  localStorage.setItem(KEY,JSON.stringify(result));
+  return result;
+}
+
+let data=loadData();
+$("date").value=todayISO();
+
 function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
 
 function render(){
- const sums={card:0,cash:0,taiwanpay:0};
- data.forEach(x=>sums[x.pool]+=Number(x.amount));
+  const sums={card:0,cash:0,taiwanpay:0};
+  data.forEach(x=>{if(x.pool in sums)sums[x.pool]+=Number(x.amount)||0});
+  const budgets={card:18000,cash:5000,taiwanpay:3900};
+  const ids={
+    card:{total:"cardTotal",remain:"cardRemain",bar:"cardBar"},
+    cash:{total:"cashTotal",remain:"cashRemain",bar:"cashBar"},
+    taiwanpay:{total:"twTotal",remain:"twRemain",bar:"twBar"}
+  };
+  Object.keys(budgets).forEach(p=>{
+    const remain=budgets[p]-sums[p];
+    const pct=Math.min(100,Math.max(0,sums[p]/budgets[p]*100));
+    const i=ids[p];
+    $(i.total).textContent=money(sums[p]);
+    $(i.remain).textContent=remain>=0?money(remain):"超支 "+money(Math.abs(remain));
+    $(i.remain).classList.toggle("warning",remain<0);
+    $(i.bar).style.width=pct+"%";
+  });
+  $("reserveBar").style.width="57.5%";
 
- const budgets={card:18000,cash:5000,taiwanpay:3900};
- $("cardTotal").textContent=money(sums.card);
- $("cashTotal").textContent=money(sums.cash);
- $("twTotal").textContent=money(sums.taiwanpay);
+  const ym=todayISO().slice(0,7);
+  const monthly=data.filter(x=>normalizeDate(x.date).slice(0,7)===ym)
+                    .sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
+  const total=monthly.reduce((s,x)=>s+Number(x.amount||0),0);
+  $("monthTotal").textContent=money(total);
 
- ["card","cash","taiwanpay"].forEach(p=>{
-   const remain=budgets[p]-sums[p];
-   const pct=Math.min(100,Math.max(0,sums[p]/budgets[p]*100));
-   const remainEl=$(p+"Remain");
-   remainEl.textContent=remain>=0?money(remain):"超支 "+money(Math.abs(remain));
-   remainEl.classList.toggle("warning",remain<0);
-   $(p+"Bar").style.width=pct+"%";
- });
-
- $("reserveBar").style.width=Math.min(100,115000/200000*100)+"%";
-
- const list=$("list");
- if(!data.length){
-   list.innerHTML='<div class="empty">目前還沒有支出紀錄</div>';
-   return;
- }
- const sorted=[...data].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id);
- list.innerHTML=sorted.map(x=>`
- <div class="tx">
-   <div>
-     <div class="tx-title">${escapeHtml(x.note||x.category)}</div>
-     <div class="tx-meta">${x.date}｜${poolName(x.pool)}${x.card?"｜"+x.card:""}｜${x.category}</div>
-   </div>
-   <div>
-     <div class="amount">${money(x.amount)}</div>
-     <button class="danger" onclick="removeTx(${x.id})">刪除</button>
-   </div>
- </div>`).join("");
+  if(!monthly.length){
+    $("list").innerHTML='<div class="empty">本月還沒有支出紀錄</div>';
+    return;
+  }
+  $("list").innerHTML=monthly.map(x=>`
+    <div class="tx">
+      <div>
+        <div class="tx-title">${escapeHtml(x.note||x.category)}</div>
+        <div class="tx-meta">${escapeHtml(x.date)}｜${x.pool==="card"?"信用卡":x.pool==="cash"?"現金":"Taiwan Pay"}${x.card?"｜"+escapeHtml(x.card):""}｜${escapeHtml(x.category)}</div>
+      </div>
+      <div>
+        <div class="amount">${money(x.amount)}</div>
+        <button class="danger" onclick="removeTx(${x.id})">刪除</button>
+      </div>
+    </div>`).join("");
 }
-
 function removeTx(id){
- if(confirm("確定刪除這筆紀錄？")){
-   data=data.filter(x=>x.id!==id);
-   save();
- }
+  if(confirm("確定刪除這筆紀錄？")){
+    data=data.filter(x=>x.id!==id);
+    save();
+  }
 }
-
+function syncCardChoice(){
+  const isCard=$("pool").value==="card";
+  $("card").disabled=!isCard;
+  if(!isCard)$("card").value="";
+}
+$("pool").addEventListener("change",syncCardChoice);
 $("form").addEventListener("submit",e=>{
- e.preventDefault();
- const pool=$("pool").value;
- let card=$("card").value;
- if(pool!=="card") card="";
- data.push({
-   id:Date.now(),
-   amount:Number($("amount").value),
-   date:$("date").value,
-   pool,card,
-   category:$("category").value,
-   note:$("note").value.trim()
- });
- e.target.reset();
- $("date").value=new Date().toISOString().slice(0,10);
- save();
+  e.preventDefault();
+  const pool=$("pool").value;
+  data.push({
+    id:Date.now(),
+    amount:Number($("amount").value),
+    date:$("date").value||todayISO(),
+    pool,
+    card:pool==="card"?$("card").value:"",
+    category:$("category").value,
+    note:$("note").value.trim()
+  });
+  e.target.reset();
+  $("date").value=todayISO();
+  syncCardChoice();
+  save();
 });
+syncCardChoice();
+render();
 
 if("serviceWorker" in navigator){
- window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js"));
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js?v=5").catch(()=>{});
+  });
 }
-render();
 </script>
 </body>
 </html>
